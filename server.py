@@ -44,14 +44,22 @@ def http(url, data=None, headers=None, timeout=25):
 def ft_token(cfg):
     if _ft_token["value"] and time.time() < _ft_token["exp"] - 30:
         return _ft_token["value"]
-    data = urllib.parse.urlencode({
-        "grant_type": "client_credentials",
-        "client_id": cfg["client_id"],
-        "client_secret": cfg["client_secret"],
-        "scope": "api_offresdemploiv2 o2dsoffre",
-    }).encode()
-    _, js = http("https://entreprise.francetravail.fr/connexion/oauth2/access_token?realm=%2Fpartenaire",
-                 data, {"Content-Type": "application/x-www-form-urlencoded"})
+    js = None
+    for scope in ("api_offresdemploiv2 o2dsoffre", "api_offresdemploiv2"):
+        data = urllib.parse.urlencode({
+            "grant_type": "client_credentials",
+            "client_id": cfg["client_id"],
+            "client_secret": cfg["client_secret"],
+            "scope": scope,
+        }).encode()
+        try:
+            _, js = http("https://entreprise.francetravail.fr/connexion/oauth2/access_token?realm=%2Fpartenaire",
+                         data, {"Content-Type": "application/x-www-form-urlencoded"})
+            break
+        except urllib.error.HTTPError as e:
+            if scope.endswith("o2dsoffre") and e.code == 400:
+                continue
+            raise
     _ft_token["value"] = js["access_token"]
     _ft_token["exp"] = time.time() + int(js.get("expires_in", 1500))
     return _ft_token["value"]
