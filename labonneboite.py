@@ -42,7 +42,7 @@ def search(cfg):
     except urllib.error.HTTPError as e:
         return [], ["La Bonne Boite : refus du token (HTTP %s) %s" % (e.code, e.read().decode("utf-8", "replace")[:200])]
     for code, label in ROMES.items():
-        params = {"rome_codes": code, "latitude": LAT, "longitude": LON, "distance": DIST, "page_size": 50}
+        params = {"rome": code, "latitude": LAT, "longitude": LON, "distance": DIST, "page_size": 50}
         url = "https://api.francetravail.io/partenaire/labonneboite/v2/recherche?" + urllib.parse.urlencode(params)
         time.sleep(1.5)  # evite l'erreur 429 (trop de requetes)
         try:
@@ -60,7 +60,7 @@ def search(cfg):
                 e.code, url.split("?")[0], e.read().decode("utf-8", "replace")[:200], _tok.get("scope"))
             if msg not in errors:
                 errors.append(msg)
-            if e.code in (401, 403):
+            if e.code in (401, 403, 422):
                 break  # inutile de continuer, meme refus pour tous les metiers
             continue
         except Exception as e:
