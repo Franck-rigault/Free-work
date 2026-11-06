@@ -3,188 +3,155 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mes annonces - Romorantin</title>
+<title>Emploi autour de Romorantin</title>
 <style>
 :root{--bg:#f6f4f1;--card:#fff;--ink:#222;--mut:#6b6b6b;--line:#e5e1db;--acc:#c2410c;--accbg:#fff1e8;--ok:#15803d;--okbg:#e7f6ec}
 @media (prefers-color-scheme:dark){:root{--bg:#171615;--card:#222120;--ink:#ece9e4;--mut:#a09b94;--line:#35322f;--acc:#fb923c;--accbg:#3a2a1e;--ok:#4ade80;--okbg:#1c3224}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,Segoe UI,sans-serif}
-header{padding:20px 16px 8px;max-width:900px;margin:auto}
+.wrap{max-width:900px;margin:auto;padding:0 16px}
+header{padding:20px 0 4px}
 h1{margin:0;font-size:22px}
+h2{font-size:17px;margin:26px 0 4px}
 .sub{color:var(--mut);font-size:13px}
-.bar{max-width:900px;margin:auto;padding:8px 16px;display:flex;flex-wrap:wrap;gap:8px}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;align-items:center}
 input,select,button{font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink)}
 input[type=search]{flex:1;min-width:200px}
 button{cursor:pointer}
-button.primary{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:600}
-.tabs{max-width:900px;margin:auto;padding:4px 16px;display:flex;gap:6px;flex-wrap:wrap}
-.tab{border-radius:999px;padding:5px 12px;font-size:13px}
-.tab.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-main{max-width:900px;margin:auto;padding:8px 16px 40px}
-.msg{padding:10px 12px;border-radius:8px;background:var(--accbg);color:var(--ink);margin:8px 0;font-size:13px}
+a{color:inherit;text-decoration:none}
+.chip{border-radius:999px;padding:5px 12px;font-size:13px}
+.chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sites a button{font-weight:600;border-color:var(--acc);color:var(--acc)}
+.sites a button:hover{background:var(--accbg)}
+.msg{padding:10px 12px;border-radius:8px;background:var(--accbg);margin:10px 0;font-size:13px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin:10px 0}
-.card.ignored{opacity:.45}
 .top{display:flex;gap:10px;justify-content:space-between;align-items:start}
-.title{font-weight:650;font-size:16px;color:var(--ink);text-decoration:none}
+.title{font-weight:650;font-size:16px}
 .title:hover{color:var(--acc)}
 .meta{color:var(--mut);font-size:13px;margin-top:2px}
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .tag{font-size:12px;padding:2px 8px;border-radius:999px;background:var(--bg);border:1px solid var(--line)}
-.tag.new{background:var(--okbg);color:var(--ok);border-color:transparent;font-weight:600}
-.desc{color:var(--mut);font-size:13px;margin-top:8px}
+.tag.ok{background:var(--okbg);color:var(--ok);border-color:transparent;font-weight:600}
 .actions{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;align-items:center}
 .actions button,.actions select{padding:4px 9px;font-size:13px}
 .star{font-size:20px;border:none;background:none;padding:0 4px;color:var(--mut)}
 .star.on{color:#eab308}
 .empty{text-align:center;color:var(--mut);padding:40px 0}
+footer{padding:30px 0 40px;text-align:center}
 </style>
 </head>
 <body>
+<div class="wrap">
 <header>
-  <h1>Annonces autour de Romorantin-Lanthenay</h1>
-  <div class="sub">Rayon de 30 km - Entreprises qui recrutent + liens Indeed, HelloWork, Facebook - tous types de contrat</div>
+  <h1>Emploi autour de Romorantin-Lanthenay</h1>
+  <div class="sub">Entreprises qui recrutent souvent (rayon 40 km) et recherche d'annonces sur les autres sites</div>
   <div class="sub" id="upd"></div>
 </header>
-<div class="bar">
-  <input id="q" type="search" placeholder="Métiers séparés par des virgules (vide = toutes les annonces)">
-  <select id="days">
-    <option value="">Toute p&eacute;riode</option><option value="1">Dernières 24 h</option>
-    <option value="3">3 jours</option><option value="7" selected>7 jours</option>
-    <option value="14">14 jours</option><option value="31">31 jours</option>
-  </select>
-  <select id="contract"><option value="">Tous contrats</option></select>
-  <button class="primary" id="go">Rechercher</button>
-</div>
-<div class="bar" style="align-items:center">
-  <span class="sub">Métiers :</span><span id="chips" style="display:contents"></span>
-  <label class="sub" style="margin-left:auto"><input type="checkbox" id="light" checked> Masquer les annonces qui mentionnent des charges lourdes</label>
-  <label class="sub"><input type="checkbox" id="beg"> Débutant accepté uniquement</label>
-</div>
-<div class="bar" id="ext"style="align-items:center">
-  <span class="sub">Chercher aussi sur :</span>
+
+<h2>1. Chercher des annonces</h2>
+<div class="sub">Choisis un ou plusieurs métiers (ou écris les tiens), puis ouvre le site : la recherche est déjà faite autour de Romorantin.</div>
+<div class="row" id="chips"></div>
+<div class="row"><input id="q" type="search" placeholder="Métier recherché (ex : animatrice, aide à domicile)"></div>
+<div class="row sites">
   <a id="l-indeed" target="_blank" rel="noopener"><button>Indeed</button></a>
   <a id="l-hw" target="_blank" rel="noopener"><button>HelloWork</button></a>
+  <a id="l-ft" target="_blank" rel="noopener"><button>France Travail</button></a>
   <a id="l-fbg" target="_blank" rel="noopener"><button>Facebook (groupes emploi)</button></a>
   <a id="l-fbj" target="_blank" rel="noopener"><button>Facebook Emplois</button></a>
 </div>
-<div class="tabs" id="tabs"></div>
-<main>
-  <div id="errors"></div>
-  <div id="list"></div>
-</main>
+<div class="sub">Facebook demande d'être connecté. Certains sites peuvent ignorer le rayon : le régler alors sur 30 à 40 km.</div>
+
+<h2>2. Entreprises qui recrutent souvent</h2>
+<div class="sub">Elles ne publient pas forcément d'annonce : une candidature spontanée a de bonnes chances. Source : La Bonne Boîte (France Travail).</div>
+<div class="row">
+  <select id="job"><option value="">Tous les métiers</option></select>
+  <input id="s" type="search" placeholder="Rechercher une entreprise ou une ville">
+  <select id="sort"><option value="pot">Meilleur potentiel</option><option value="dist">Plus proches</option></select>
+  <label class="sub"><input type="checkbox" id="favonly"> Favoris seulement</label>
+</div>
+<div id="count" class="sub"></div>
+<div id="errors"></div>
+<div id="list"></div>
+<footer class="sub">Données mises à jour automatiquement chaque matin.</footer>
+</div>
+
 <script>
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-let companies=[], offers=[], state={offers:{},seen:{}}, tab="all", errors=[];
-const STATUS={"":"Pas de statut","apostuler":"À postuler","postule":"Postulé","entretien":"Entretien","ignore":"Ignoré"};
-
-const KEY="emploi-suivi-v1";
-function loadState(){
-  try{state=JSON.parse(localStorage.getItem(KEY))||state;}catch(e){}
-  state.offers=state.offers||{};
-}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
-const st=id=>state.offers[id]||(state.offers[id]={});
 const norm=s=>String(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
-let all=null, updated="";
+const JOBS=["animatrice","animateur périscolaire","ATSEM","AESH","auxiliaire de vie","aide à domicile","agent de service","agent d'entretien","employé polyvalent","vendeuse","caissière","équipier restauration","serveuse","préparateur de commandes","agent de production","assistante maternelle crèche"];
+const STATUS={"":"À contacter","contactee":"Contactée","reponse":"Réponse reçue","refus":"Refus / sans suite"};
+const KEY="emploi-entreprises-v1";
+let companies=[], state={c:{}};
+try{state=JSON.parse(localStorage.getItem(KEY))||state;}catch(e){}
+state.c=state.c||{};
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}};
+const st=id=>state.c[id]||(state.c[id]={});
 
-async function search(){
-  $("#go").disabled=true;$("#go").textContent="Recherche...";
-  if(!all){
-    try{
-      const r=await (await fetch("offers.json?"+Date.now())).json();
-      all=r.offers||[]; companies=r.companies||[]; errors=r.errors||[]; updated=r.updated||"";
-    }catch(e){all=[];errors=["Impossible de charger les annonces (offers.json)."];}
-    const cs=[...new Set(all.map(o=>o.contract).filter(Boolean))].sort();
-    $("#contract").innerHTML='<option value="">Tous contrats</option>'+cs.map(c=>`<option>${esc(c)}</option>`).join("");
-    if(updated){const d=new Date(updated);$("#upd").textContent="Annonces mises à jour le "+d.toLocaleDateString("fr-FR")+" à "+d.toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"});}
-  }
-  const ts=$("#q").value.split(",").map(norm).map(s=>s.trim()).filter(Boolean);
-  const days=parseInt($("#days").value)||0;
-  const limit=days?new Date(Date.now()-days*864e5).toISOString().slice(0,10):"";
-  offers=all.filter(o=>(!ts.length||ts.some(t=>norm(o.title+" "+o.description).includes(t)))&&(!limit||o.date>=limit));
-  $("#go").disabled=false;$("#go").textContent="Rechercher";
-  render();
+/* ---------- liens vers les autres sites ---------- */
+const terms=()=>$("#q").value.split(",").map(s=>s.trim()).filter(Boolean);
+function links(){
+  const t=terms(), q=encodeURIComponent(t.join(" ")), v=encodeURIComponent("Romorantin-Lanthenay");
+  $("#l-indeed").href=`https://fr.indeed.com/jobs?q=${q}&l=${v}&radius=40&sort=date`;
+  $("#l-hw").href=`https://www.hellowork.com/fr-fr/emploi/recherche.html?k=${q}&l=${v}&ray=40`;
+  $("#l-ft").href=`https://candidat.francetravail.fr/offres/recherche?lieux=41194&motsCles=${q}&rayon=40`;
+  $("#l-fbg").href=`https://www.facebook.com/search/groups/?q=${encodeURIComponent((t.join(" ")+" emploi romorantin").trim())}`;
+  $("#l-fbj").href="https://www.facebook.com/jobs/";
 }
-
-function renderCompanies(){
-  if(!companies.length){$("#list").innerHTML='<div class="empty">Aucune entreprise chargée pour le moment.</div>';return;}
-  $("#list").innerHTML='<div class="msg">Ces entreprises ne publient pas forcément d\'annonce mais recrutent souvent dans ces métiers : une candidature spontanée a de bonnes chances.</div>'+companies.map(c=>{
-    const link=c.url||("https://www.google.com/maps/search/"+encodeURIComponent(c.name+" "+c.address));
-    return `<div class="card"><div class="top"><div><a class="title" href="${esc(link)}" target="_blank" rel="noopener">${esc(c.name)}</a>
-      <div class="meta">${esc(c.address)}</div></div></div>
-      <div class="tags">${c.distance!=null?`<span class="tag">📍 ${esc(Math.round(c.distance))} km</span>`:""}
-      ${c.size?`<span class="tag">${esc(c.size)}</span>`:""}${c.sector?`<span class="tag">${esc(c.sector)}</span>`:""}
-      ${c.stars?`<span class="tag new" title="Potentiel d'embauche">${"★".repeat(c.stars)}${"☆".repeat(5-c.stars)} potentiel d'embauche</span>`:""}</div>
-      <div class="desc">Métiers : ${esc((c.jobs||[]).join(", "))}</div>
-      <div class="actions"><a href="${esc(link)}" target="_blank" rel="noopener"><button>Voir l'entreprise</button></a></div></div>`;}).join("");
+function chips(){
+  const t=terms().map(x=>x.toLowerCase());
+  $("#chips").innerHTML=JOBS.map(j=>`<button class="chip ${t.includes(j.toLowerCase())?"on":""}" data-j="${esc(j)}">${esc(j)}</button>`).join("");
+  $("#chips").querySelectorAll("button").forEach(b=>b.onclick=()=>{
+    const j=b.dataset.j, cur=terms(), i=cur.findIndex(x=>x.toLowerCase()===j.toLowerCase());
+    if(i>=0)cur.splice(i,1);else cur.push(j);
+    $("#q").value=cur.join(", ");chips();links();
+  });
 }
+$("#q").addEventListener("input",()=>{chips();links();});
 
+/* ---------- entreprises ---------- */
 function render(){
-  const c=$("#contract").value;
-  const count=f=>offers.filter(f).length;
-  const tabs=[["all","Toutes",o=>st(o.id).status!=="ignore"],["fav","⭐ Favoris",o=>st(o.id).fav],
-    ["apply","Candidatures",o=>["postule","entretien"].includes(st(o.id).status)],["ign","Ignorées",o=>st(o.id).status==="ignore"],["co","🏢 Entreprises qui recrutent",()=>true]];
-  $("#tabs").innerHTML=tabs.map(([k,l,f])=>`<button class="tab ${tab===k?"on":""}" data-t="${k}">${l} (${k==="co"?companies.length:count(f)})</button>`).join("");
-  $("#tabs").querySelectorAll("button").forEach(b=>b.onclick=()=>{tab=b.dataset.t;render();});
-  $("#errors").innerHTML=errors.map(e=>`<div class="msg">${esc(e)}</div>`).join("");
-  if(tab==="co"){renderCompanies();return;}
-  const f=tabs.find(t=>t[0]===tab)[2];
-  const list=offers.filter(f).filter(o=>!c||o.contract===c).filter(o=>!$("#beg").checked||o.beginner).filter(o=>!$("#light").checked||!o.heavy)
-    .sort((a,b)=>(b.beginner-a.beginner)||b.date.localeCompare(a.date));
-  if(!list.length){$("#list").innerHTML='<div class="empty">Aucune annonce à afficher.</div>';return;}
-  $("#list").innerHTML=list.map(o=>{
-    const s=st(o.id), isNew=o.date>=new Date(Date.now()-3*864e5).toISOString().slice(0,10);
-    return `<div class="card ${s.status==="ignore"?"ignored":""}" data-id="${esc(o.id)}">
-      <div class="top"><div>
-        <a class="title" href="${esc(o.url)}" target="_blank" rel="noopener">${esc(o.title)}</a>
-        <div class="meta">${esc(o.company||"Entreprise non précisée")} - ${esc(o.location)}</div></div>
-        <button class="star ${s.fav?"on":""}" data-a="fav" title="Favori">${s.fav?"★":"☆"}</button></div>
-      <div class="tags">
-        ${isNew?'<span class="tag new">Nouveau</span>':""}
-        ${o.beginner?'<span class="tag new">Débutant accepté</span>':""}${LOAD[o.load]||""}${o.km!=null?`<span class="tag">📍 ${o.km} km</span>`:""}
-        ${o.contract?`<span class="tag">${esc(o.contract)}</span>`:""}
-        ${o.salary?`<span class="tag">${esc(o.salary)}</span>`:""}
-        <span class="tag">${esc(o.date)}</span><span class="tag">${esc(o.source)}</span></div>
-      ${o.summary?`<div class="desc" style="color:var(--ink);white-space:pre-line"><b>Résumé :</b> ${esc(o.summary)}</div>`:""}
-      <details class="desc"><summary>Texte de l'annonce</summary>${esc(o.description)}${o.description.length>=700?"...":""}</details>
+  const job=$("#job").value, s=norm($("#s").value), fav=$("#favonly").checked, sort=$("#sort").value;
+  let list=companies.filter(c=>(!job||(c.jobs||[]).includes(job))
+    &&(!s||norm(c.name+" "+c.address+" "+c.sector).includes(s))&&(!fav||st(c.id).fav));
+  list.sort(sort==="dist"?(a,b)=>(a.distance??999)-(b.distance??999):(a,b)=>(b.potential||0)-(a.potential||0));
+  $("#count").textContent=list.length+" entreprise"+(list.length>1?"s":"");
+  if(!list.length){$("#list").innerHTML='<div class="empty">Aucune entreprise à afficher.</div>';return;}
+  $("#list").innerHTML=list.map(c=>{
+    const s=st(c.id);
+    const link=c.url||("https://www.google.com/maps/search/"+encodeURIComponent(c.name+" "+c.address));
+    return `<div class="card" data-id="${esc(c.id)}"><div class="top"><div>
+      <a class="title" href="${esc(link)}" target="_blank" rel="noopener">${esc(c.name)}</a>
+      <div class="meta">${esc(c.address)}</div></div>
+      <button class="star ${s.fav?"on":""}" data-a="fav" title="Favori">${s.fav?"★":"☆"}</button></div>
+      <div class="tags">${c.distance!=null?`<span class="tag">📍 ${esc(Math.round(c.distance))} km</span>`:""}
+        ${c.size?`<span class="tag">${esc(c.size)}</span>`:""}${c.sector?`<span class="tag">${esc(c.sector)}</span>`:""}
+        ${c.stars?`<span class="tag ok" title="Potentiel d'embauche">${"★".repeat(c.stars)}${"☆".repeat(5-c.stars)}</span>`:""}</div>
+      <div class="meta" style="margin-top:8px">Métiers : ${esc((c.jobs||[]).join(", "))}</div>
       <div class="actions">
         <select data-a="status">${Object.entries(STATUS).map(([k,v])=>`<option value="${k}" ${(s.status||"")===k?"selected":""}>${v}</option>`).join("")}</select>
-        <a href="${esc(o.url)}" target="_blank" rel="noopener"><button>Voir l'annonce</button></a>
-      </div></div>`;}).join("");
+        <a href="${esc(link)}" target="_blank" rel="noopener"><button>Voir l'entreprise</button></a></div></div>`;}).join("");
   $("#list").querySelectorAll(".card").forEach(card=>{
     const id=card.dataset.id;
     card.querySelector('[data-a=fav]').onclick=()=>{st(id).fav=!st(id).fav;save();render();};
     card.querySelector('[data-a=status]').onchange=e=>{st(id).status=e.target.value;save();render();};
   });
 }
-function extLinks(){
-  const q=encodeURIComponent($("#q").value.trim()), v=encodeURIComponent("Romorantin-Lanthenay");
-  $("#l-indeed").href=`https://fr.indeed.com/jobs?q=${q}&l=${v}&radius=30&sort=date`;
-  $("#l-hw").href=`https://www.hellowork.com/fr-fr/emploi/recherche.html?k=${q}&l=${v}&ray=30`;
-  $("#l-fbg").href=`https://www.facebook.com/search/groups/?q=${encodeURIComponent(($("#q").value.trim()+" emploi romorantin").trim())}`;
-  $("#l-fbj").href="https://www.facebook.com/jobs/";
+["job","sort","favonly"].forEach(i=>$("#"+i).onchange=render);
+$("#s").addEventListener("input",render);
+
+async function load(){
+  try{
+    const r=await (await fetch("offers.json?"+Date.now())).json();
+    companies=r.companies||[];
+    $("#errors").innerHTML=(r.errors||[]).filter(e=>!/Annonces pas encore/.test(e)).map(e=>`<div class="msg">${esc(e)}</div>`).join("");
+    if(r.updated){const d=new Date(r.updated);$("#upd").textContent="Mis à jour le "+d.toLocaleDateString("fr-FR")+" à "+d.toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"});}
+  }catch(e){$("#errors").innerHTML='<div class="msg">Impossible de charger les entreprises.</div>';}
+  const labels=[...new Set(companies.flatMap(c=>c.jobs||[]))].sort();
+  $("#job").innerHTML='<option value="">Tous les métiers</option>'+labels.map(l=>`<option>${esc(l)}</option>`).join("");
+  render();
 }
-const LOAD={heavy:'<span class="tag" style="color:#b91c1c">⚠ Port de charges mentionné</span>',
- check:'<span class="tag" style="color:var(--acc)">❓ Métier souvent physique, à vérifier</span>',
- light:'<span class="tag new">✓ Pas de charges lourdes</span>'};
-const JOBS=["animatrice","animateur périscolaire","ATSEM","AESH accompagnant élève","auxiliaire de vie","aide à domicile","agent de service","agent d'entretien","employé polyvalent","vendeuse","caissière","équipier restauration","serveuse","préparateur de commandes","agent de production","assistante maternelle crèche"];
-const terms=()=>$("#q").value.split(",").map(s=>s.trim()).filter(Boolean);
-function drawChips(){
-  const t=terms().map(x=>x.toLowerCase());
-  $("#chips").innerHTML=JOBS.map(j=>`<button class="tab ${t.includes(j.toLowerCase())?"on":""}" data-j="${esc(j)}">${esc(j)}</button>`).join("");
-  $("#chips").querySelectorAll("button").forEach(b=>b.onclick=()=>{
-    const j=b.dataset.j, cur=terms(), i=cur.findIndex(x=>x.toLowerCase()===j.toLowerCase());
-    if(i>=0)cur.splice(i,1);else cur.push(j);
-    $("#q").value=cur.join(", ");drawChips();extLinks();
-  });
-}
-$("#beg").onchange=render;$("#light").onchange=render;
-$("#q").addEventListener("input",()=>{extLinks();drawChips();});extLinks();drawChips();
-$("#go").onclick=search;
-$("#q").addEventListener("keydown",e=>{if(e.key==="Enter")search();});
-$("#contract").onchange=render;
-loadState();search();
+chips();links();load();
 </script>
 </body>
 </html>
