@@ -2,7 +2,7 @@
 Lance chaque jour par GitHub Actions, ou a la main : python fetch_offers.py
 """
 import json, os, sys, datetime
-import server
+import server, labonneboite
 
 JOBS = ["animatrice", "animateur periscolaire", "ATSEM", "AESH", "auxiliaire de vie", "aide a domicile",
         "agent de service", "agent d'entretien", "employe polyvalent", "vendeuse", "caissiere",
@@ -21,10 +21,17 @@ for r in runs:
             offers.append(o)
 offers.sort(key=lambda o: o["date"], reverse=True)
 
-if not offers:
-    print("Aucune annonce recuperee :", errors)
+errors = [e for e in errors if "cles absentes" not in e]
+companies = []
+ft = server.get_cfg().get("france_travail", {})
+if ft.get("client_id") and ft.get("client_secret"):
+    companies, lbb_errors = labonneboite.search(ft)
+    errors += lbb_errors
+
+if not offers and not companies:
+    print("Rien recupere :", errors)
     sys.exit(1)
 with open(OUT, "w", encoding="utf-8") as f:
     json.dump({"updated": datetime.datetime.now(datetime.timezone.utc).isoformat(), "errors": errors,
-               "offers": offers}, f, ensure_ascii=False)
-print(len(offers), "annonces ecrites", "| avertissements :", errors)
+               "offers": offers, "companies": companies}, f, ensure_ascii=False)
+print(len(offers), "annonces,", len(companies), "entreprises | avertissements :", errors)

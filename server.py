@@ -205,6 +205,16 @@ def analyze(o):
     o.pop("lon", None)
 
 
+def get_cfg():
+    cfg = load_json(CONFIG_PATH, {})
+    e = os.environ
+    if e.get("FT_CLIENT_ID"):
+        cfg["france_travail"] = {"client_id": e["FT_CLIENT_ID"], "client_secret": e.get("FT_CLIENT_SECRET", "")}
+    if e.get("ADZUNA_APP_ID"):
+        cfg["adzuna"] = {"app_id": e["ADZUNA_APP_ID"], "app_key": e.get("ADZUNA_APP_KEY", "")}
+    return cfg
+
+
 def search_all(q, days):
     terms = [t.strip() for t in q.split(",") if t.strip()][:15]
     cfg = load_json(CONFIG_PATH, {})
@@ -215,10 +225,10 @@ def search_all(q, days):
         cfg["adzuna"] = {"app_id": e["ADZUNA_APP_ID"], "app_key": e.get("ADZUNA_APP_KEY", "")}
     offers, errors, jobs = [], [], []
     ft, az = cfg.get("france_travail", {}), cfg.get("adzuna", {})
-    if ft.get("client_id") and ft.get("client_secret"):
+    if ft.get("client_id") and ft.get("client_secret") and (ft.get("offres") or e.get("FT_OFFRES")):
         jobs.append(("France Travail", lambda: search_ft(ft, terms, days)))
-    elif not (az.get("app_id") and az.get("app_key")):
-        errors.append("France Travail : cles absentes dans config.json")
+    elif False:
+        pass
     if az.get("app_id") and az.get("app_key"):
         jobs.append(("Adzuna", lambda: search_adzuna(az, terms, days)))
     elif not (ft.get("client_id") and ft.get("client_secret")):

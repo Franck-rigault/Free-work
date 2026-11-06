@@ -42,7 +42,7 @@ main{max-width:900px;margin:auto;padding:8px 16px 40px}
 <body>
 <header>
   <h1>Annonces autour de Romorantin-Lanthenay</h1>
-  <div class="sub">Rayon de 30 km - Adzuna (+ liens Indeed, HelloWork, Facebook) - tous types de contrat</div>
+  <div class="sub">Rayon de 30 km - Entreprises qui recrutent + liens Indeed, HelloWork, Facebook - tous types de contrat</div>
   <div class="sub" id="upd"></div>
 </header>
 <div class="bar">
@@ -75,7 +75,7 @@ main{max-width:900px;margin:auto;padding:8px 16px 40px}
 <script>
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-let offers=[], state={offers:{},seen:{}}, tab="all", errors=[];
+let companies=[], offers=[], state={offers:{},seen:{}}, tab="all", errors=[];
 const STATUS={"":"Pas de statut","apostuler":"À postuler","postule":"Postulé","entretien":"Entretien","ignore":"Ignoré"};
 
 const KEY="emploi-suivi-v1";
@@ -93,7 +93,7 @@ async function search(){
   if(!all){
     try{
       const r=await (await fetch("offers.json?"+Date.now())).json();
-      all=r.offers||[]; errors=r.errors||[]; updated=r.updated||"";
+      all=r.offers||[]; companies=r.companies||[]; errors=r.errors||[]; updated=r.updated||"";
     }catch(e){all=[];errors=["Impossible de charger les annonces (offers.json)."];}
     const cs=[...new Set(all.map(o=>o.contract).filter(Boolean))].sort();
     $("#contract").innerHTML='<option value="">Tous contrats</option>'+cs.map(c=>`<option>${esc(c)}</option>`).join("");
@@ -107,14 +107,28 @@ async function search(){
   render();
 }
 
+function renderCompanies(){
+  if(!companies.length){$("#list").innerHTML='<div class="empty">Aucune entreprise chargée pour le moment.</div>';return;}
+  $("#list").innerHTML='<div class="msg">Ces entreprises ne publient pas forcément d\'annonce mais recrutent souvent dans ces métiers : une candidature spontanée a de bonnes chances.</div>'+companies.map(c=>{
+    const link=c.url||("https://www.google.com/maps/search/"+encodeURIComponent(c.name+" "+c.address));
+    return `<div class="card"><div class="top"><div><a class="title" href="${esc(link)}" target="_blank" rel="noopener">${esc(c.name)}</a>
+      <div class="meta">${esc(c.address)}</div></div></div>
+      <div class="tags">${c.distance!=null?`<span class="tag">📍 ${esc(Math.round(c.distance))} km</span>`:""}
+      ${c.size?`<span class="tag">${esc(c.size)}</span>`:""}${c.sector?`<span class="tag">${esc(c.sector)}</span>`:""}
+      ${c.potential?`<span class="tag new">Potentiel d'embauche : ${esc(c.potential)}</span>`:""}</div>
+      <div class="desc">Métiers : ${esc((c.jobs||[]).join(", "))}</div>
+      <div class="actions"><a href="${esc(link)}" target="_blank" rel="noopener"><button>Voir l'entreprise</button></a></div></div>`;}).join("");
+}
+
 function render(){
   const c=$("#contract").value;
   const count=f=>offers.filter(f).length;
   const tabs=[["all","Toutes",o=>st(o.id).status!=="ignore"],["fav","⭐ Favoris",o=>st(o.id).fav],
-    ["apply","Candidatures",o=>["postule","entretien"].includes(st(o.id).status)],["ign","Ignorées",o=>st(o.id).status==="ignore"]];
-  $("#tabs").innerHTML=tabs.map(([k,l,f])=>`<button class="tab ${tab===k?"on":""}" data-t="${k}">${l} (${count(f)})</button>`).join("");
+    ["apply","Candidatures",o=>["postule","entretien"].includes(st(o.id).status)],["ign","Ignorées",o=>st(o.id).status==="ignore"],["co","🏢 Entreprises qui recrutent",()=>true]];
+  $("#tabs").innerHTML=tabs.map(([k,l,f])=>`<button class="tab ${tab===k?"on":""}" data-t="${k}">${l} (${k==="co"?companies.length:count(f)})</button>`).join("");
   $("#tabs").querySelectorAll("button").forEach(b=>b.onclick=()=>{tab=b.dataset.t;render();});
   $("#errors").innerHTML=errors.map(e=>`<div class="msg">${esc(e)}</div>`).join("");
+  if(tab==="co"){renderCompanies();return;}
   const f=tabs.find(t=>t[0]===tab)[2];
   const list=offers.filter(f).filter(o=>!c||o.contract===c).filter(o=>!$("#beg").checked||o.beginner).filter(o=>!$("#light").checked||!o.heavy)
     .sort((a,b)=>(b.beginner-a.beginner)||b.date.localeCompare(a.date));
