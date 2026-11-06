@@ -9,7 +9,7 @@ ROMES = {
     "K1304": "Services domestiques", "D1106": "Vente", "D1505": "Caisse",
     "D1507": "Mise en rayon libre-service", "K2204": "Nettoyage de locaux", "G1803": "Service en restauration",
 }
-LAT, LON, DIST = 47.3586, 1.7437, 30
+LAT, LON, DIST = 47.3586, 1.7437, 40   # 40 km pour inclure Vierzon
 _tok = {"v": None, "exp": 0}
 
 
@@ -113,7 +113,7 @@ def search(cfg):
             if label not in c["jobs"]:
                 c["jobs"].append(label)
     # on retire ce qui depasse nettement le rayon quand la distance est connue
-    for k in [k for k, c in found.items() if c["distance"] is not None and c["distance"] > DIST + 3]:
+    for k in [k for k, c in found.items() if c["distance"] is not None and c["distance"] > DIST + 5]:
         del found[k]
     mx = max([c["potential"] or 0 for c in found.values()] + [1])
     for c in found.values():
