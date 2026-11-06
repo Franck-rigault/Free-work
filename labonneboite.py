@@ -23,6 +23,7 @@ def token(cfg):
     _, js = server.http("https://entreprise.francetravail.fr/connexion/oauth2/access_token?realm=%2Fpartenaire",
                         data, {"Content-Type": "application/x-www-form-urlencoded"})
     _tok["v"], _tok["exp"] = js["access_token"], time.time() + int(js.get("expires_in", 1500))
+    _tok["scope"] = js.get("scope", "?")
     return _tok["v"]
 
 
@@ -35,12 +36,24 @@ def search(cfg):
     for code, label in ROMES.items():
         params = {"rome_codes": code, "latitude": LAT, "longitude": LON, "distance": DIST, "page_size": 50}
         url = "https://api.francetravail.io/partenaire/labonneboite/v2/recherche?" + urllib.parse.urlencode(params)
+        time.sleep(1.5)  # evite l'erreur 429 (trop de requetes)
         try:
-            _, js = server.http(url, headers={"Authorization": "Bearer " + tk, "Accept": "application/json"})
+            for attempt in range(4):
+                try:
+                    _, js = server.http(url, headers={"Authorization": "Bearer " + tk, "Accept": "application/json"})
+                    break
+                except urllib.error.HTTPError as e:
+                    if e.code == 429 and attempt < 3:
+                        time.sleep(4 * (attempt + 1))
+                        continue
+                    raise
         except urllib.error.HTTPError as e:
-            msg = "La Bonne Boite : HTTP %s sur %s | %s" % (e.code, url.split("?")[0], e.read().decode("utf-8", "replace")[:200])
+            msg = "La Bonne Boite : HTTP %s sur %s | %s | scopes du token : %s" % (
+                e.code, url.split("?")[0], e.read().decode("utf-8", "replace")[:200], _tok.get("scope"))
             if msg not in errors:
                 errors.append(msg)
+            if e.code in (401, 403):
+                break  # inutile de continuer, meme refus pour tous les metiers
             continue
         except Exception as e:
             errors.append("La Bonne Boite : %s" % e)
