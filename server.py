@@ -221,7 +221,11 @@ def search_all(q, days):
         try:
             results[name] = fn()
         except urllib.error.HTTPError as e:
-            results[name] = "%s : erreur HTTP %s (cles invalides ?)" % (name, e.code)
+            try:
+                detail = e.read().decode("utf-8", "replace")[:200]
+            except Exception:
+                detail = ""
+            results[name] = "%s : erreur HTTP %s sur %s | %s" % (name, e.code, e.url.split("?")[0], detail)
         except Exception as e:
             results[name] = "%s : %s" % (name, e)
 
