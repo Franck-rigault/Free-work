@@ -18,7 +18,8 @@ def token(cfg):
         return _tok["v"]
     data = urllib.parse.urlencode({
         "grant_type": "client_credentials", "client_id": cfg["client_id"],
-        "client_secret": cfg["client_secret"], "scope": "api_labonneboitev2"}).encode()
+        "client_secret": cfg["client_secret"],
+        "scope": "application_%s api_labonneboitev2" % cfg["client_id"]}).encode()
     _, js = server.http("https://entreprise.francetravail.fr/connexion/oauth2/access_token?realm=%2Fpartenaire",
                         data, {"Content-Type": "application/x-www-form-urlencoded"})
     _tok["v"], _tok["exp"] = js["access_token"], time.time() + int(js.get("expires_in", 1500))
