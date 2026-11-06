@@ -217,11 +217,11 @@ def search_all(q, days):
     ft, az = cfg.get("france_travail", {}), cfg.get("adzuna", {})
     if ft.get("client_id") and ft.get("client_secret"):
         jobs.append(("France Travail", lambda: search_ft(ft, terms, days)))
-    else:
+    elif not (az.get("app_id") and az.get("app_key")):
         errors.append("France Travail : cles absentes dans config.json")
     if az.get("app_id") and az.get("app_key"):
         jobs.append(("Adzuna", lambda: search_adzuna(az, terms, days)))
-    else:
+    elif not (ft.get("client_id") and ft.get("client_secret")):
         errors.append("Adzuna : cles absentes dans config.json")
     results = {}
 
