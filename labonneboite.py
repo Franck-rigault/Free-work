@@ -16,12 +16,20 @@ _tok = {"v": None, "exp": 0}
 def token(cfg):
     if _tok["v"] and time.time() < _tok["exp"] - 30:
         return _tok["v"]
-    data = urllib.parse.urlencode({
-        "grant_type": "client_credentials", "client_id": cfg["client_id"],
-        "client_secret": cfg["client_secret"],
-        "scope": "application_%s api_labonneboitev2" % cfg["client_id"]}).encode()
-    _, js = server.http("https://entreprise.francetravail.fr/connexion/oauth2/access_token?realm=%2Fpartenaire",
-                        data, {"Content-Type": "application/x-www-form-urlencoded"})
+    js = None
+    for scope in ("application_%s api_labonneboitev2 search" % cfg["client_id"],
+                  "application_%s api_labonneboitev2" % cfg["client_id"]):
+        data = urllib.parse.urlencode({
+            "grant_type": "client_credentials", "client_id": cfg["client_id"],
+            "client_secret": cfg["client_secret"], "scope": scope}).encode()
+        try:
+            _, js = server.http("https://entreprise.francetravail.fr/connexion/oauth2/access_token?realm=%2Fpartenaire",
+                                data, {"Content-Type": "application/x-www-form-urlencoded"})
+            break
+        except urllib.error.HTTPError as e:
+            if scope.endswith("search") and e.code == 400:
+                continue
+            raise
     _tok["v"], _tok["exp"] = js["access_token"], time.time() + int(js.get("expires_in", 1500))
     _tok["scope"] = js.get("scope", "?")
     return _tok["v"]
