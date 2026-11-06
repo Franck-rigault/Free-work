@@ -115,7 +115,7 @@ function renderCompanies(){
       <div class="meta">${esc(c.address)}</div></div></div>
       <div class="tags">${c.distance!=null?`<span class="tag">📍 ${esc(Math.round(c.distance))} km</span>`:""}
       ${c.size?`<span class="tag">${esc(c.size)}</span>`:""}${c.sector?`<span class="tag">${esc(c.sector)}</span>`:""}
-      ${c.potential?`<span class="tag new">Potentiel d'embauche : ${esc(c.potential)}</span>`:""}</div>
+      ${c.stars?`<span class="tag new" title="Potentiel d'embauche">${"★".repeat(c.stars)}${"☆".repeat(5-c.stars)} potentiel d'embauche</span>`:""}</div>
       <div class="desc">Métiers : ${esc((c.jobs||[]).join(", "))}</div>
       <div class="actions"><a href="${esc(link)}" target="_blank" rel="noopener"><button>Voir l'entreprise</button></a></div></div>`;}).join("");
 }
